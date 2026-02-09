@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Student Login / Sign Up</title>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+<style>
+/* Body & Background */
+body { 
+  font-family: Arial, sans-serif; 
+  background: #0a1f44; /* dark blue background */
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  height: 100vh; 
+  margin: 0;
+}
+
+/* Login Container with Gradient */
+.container { 
+  background: linear-gradient(135deg, #89cfff, #fff47f); /* light blue to yellow */
+  padding: 40px; 
+  border-radius: 15px; 
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
+  width: 360px; 
+  text-align: center;
+  color: #0a1f44; /* dark text for contrast */
+}
+
+/* Headings */
+h2 {
+  margin-bottom: 25px;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+/* Inputs & Buttons */
+input, button { 
+  width: 100%; 
+  padding: 12px; 
+  margin: 10px 0; 
+  border-radius: 8px; 
+  border: none; 
+  box-sizing: border-box; 
+  font-size: 16px;
+}
+
+/* Input Fields */
+input {
+  background: rgba(255,255,255,0.9);
+  color: #0a1f44;
+}
+
+/* Buttons */
+button { 
+  background: #0a1f44; 
+  color: #fff; 
+  cursor: pointer; 
+  transition: background 0.3s; 
+}
+button:hover { 
+  background: #00214d; 
+}
+
+/* Switch Text */
+.switch { 
+  text-align: center; 
+  margin-top: 15px; 
+  cursor: pointer; 
+  color: #0a1f44; 
+  font-weight: bold;
+}
+.switch:hover { 
+  text-decoration: underline; 
+}
+</style>
+</head>
+<body>
+
+<div class="container" id="authContainer">
+  <h2 id="formTitle">Student Login</h2>
+  
+  <input type="email" id="email" placeholder="Email">
+  <input type="password" id="password" placeholder="Password">
+  <button id="actionButton">Login</button>
+
+  <p class="switch" id="toggleForm">Don't have an account? Sign Up</p>
+</div>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyAal-tUtavmqhKDGfY5ETXTanvBoieN304",
+  authDomain: "student-document-request-4cd93.firebaseapp.com",
+  projectId: "student-document-request-4cd93",
+  storageBucket: "student-document-request-4cd93.firebasestorage.app",
+  messagingSenderId: "646537888403",
+  appId: "1:646537888403:web:b9c8826a2ae92f073f4366",
+  measurementId: "G-TQQ8779L4G"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+
+// Form state: "login" or "signup"
+let formState = "login";
+
+const formTitle = document.getElementById("formTitle");
+const actionButton = document.getElementById("actionButton");
+const toggleForm = document.getElementById("toggleForm");
+
+toggleForm.addEventListener("click", () => {
+  if(formState === "login"){
+    formState = "signup";
+    formTitle.innerText = "Student Sign Up";
+    actionButton.innerText = "Sign Up";
+    toggleForm.innerText = "Already have an account? Login";
+  } else {
+    formState = "login";
+    formTitle.innerText = "Student Login";
+    actionButton.innerText = "Login";
+    toggleForm.innerText = "Don't have an account? Sign Up";
+  }
+});
+
+actionButton.addEventListener("click", () => {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  if(formState === "login"){
+    // 🔹 Login
+    auth.signInWithEmailAndPassword(email, password)
+    .then(() => {
+      alert("Login Successful!");
+      window.location.href = "https://pginhsrequest.wordpress.com/"; // redirect to WordPress
+    })
+    .catch(error => {
+      alert("Login Failed: " + error.message);
+    });
+  } else {
+    // 🔹 Sign Up
+    auth.createUserWithEmailAndPassword(email, password)
+    .then(() => {
+      alert("Account Created! You can now login.");
+      // Optionally auto-login after sign-up:
+      // window.location.href = "https://pginhsrequest.wordpress.com/";
+    })
+    .catch(error => {
+      alert("Sign Up Failed: " + error.message);
+    });
+  }
+});
+</script>
+
+</body>
+</html>
