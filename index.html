@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Student Login / Sign Up</title>
+<title> PGINHS Student Login / Sign Up</title>
 
 <!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -18,35 +18,38 @@ body {
   align-items: center; 
   height: 100vh; 
   margin: 0;
+  padding: 10px;
 }
 
 /* Login Container with Gradient */
 .container { 
   background: linear-gradient(135deg, #89cfff, #fff47f); /* light blue to yellow */
-  padding: 40px; 
+  padding: 50px 30px; 
   border-radius: 15px; 
   box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
-  width: 360px; 
+  width: 100%;
+  max-width: 420px; /* bigger for phone */
   text-align: center;
-  color: #0a1f44; /* dark text for contrast */
+  color: #0a1f44; /* dark text */
+  box-sizing: border-box;
 }
 
 /* Headings */
 h2 {
-  margin-bottom: 25px;
-  font-size: 28px;
+  margin-bottom: 30px;
+  font-size: 30px;
   font-weight: bold;
 }
 
 /* Inputs & Buttons */
 input, button { 
   width: 100%; 
-  padding: 12px; 
-  margin: 10px 0; 
-  border-radius: 8px; 
+  padding: 16px; /* bigger touch area */
+  margin: 12px 0; 
+  border-radius: 10px; 
   border: none; 
   box-sizing: border-box; 
-  font-size: 16px;
+  font-size: 18px; /* larger text for mobile */
 }
 
 /* Input Fields */
@@ -61,6 +64,7 @@ button {
   color: #fff; 
   cursor: pointer; 
   transition: background 0.3s; 
+  font-weight: bold;
 }
 button:hover { 
   background: #00214d; 
@@ -69,13 +73,27 @@ button:hover {
 /* Switch Text */
 .switch { 
   text-align: center; 
-  margin-top: 15px; 
+  margin-top: 20px; 
   cursor: pointer; 
   color: #0a1f44; 
   font-weight: bold;
 }
 .switch:hover { 
   text-decoration: underline; 
+}
+
+/* Responsive for smaller screens */
+@media screen and (max-width: 400px){
+  .container {
+    padding: 40px 20px;
+  }
+  input, button {
+    padding: 14px;
+    font-size: 16px;
+  }
+  h2 {
+    font-size: 26px;
+  }
 }
 </style>
 </head>
@@ -131,7 +149,6 @@ actionButton.addEventListener("click", () => {
   const password = document.getElementById("password").value;
 
   if(formState === "login"){
-    // 🔹 Login
     auth.signInWithEmailAndPassword(email, password)
     .then(() => {
       alert("Login Successful!");
@@ -141,12 +158,14 @@ actionButton.addEventListener("click", () => {
       alert("Login Failed: " + error.message);
     });
   } else {
-    // 🔹 Sign Up
     auth.createUserWithEmailAndPassword(email, password)
-    .then(() => {
-      alert("Account Created! You can now login.");
-      // Optionally auto-login after sign-up:
-      // window.location.href = "https://pginhsrequest.wordpress.com/";
+    .then(userCredential => {
+      alert("Account Created! Logging you in...");
+      // Automatically log in after sign-up and redirect
+      auth.signInWithEmailAndPassword(email, password)
+      .then(() => {
+        window.location.href = "https://pginhsrequest.wordpress.com/";
+      });
     })
     .catch(error => {
       alert("Sign Up Failed: " + error.message);
