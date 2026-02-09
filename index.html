@@ -2,175 +2,129 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title> PGINHS Student Login / Sign Up</title>
+<title>Student Document Request Form</title>
 
 <!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
 
 <style>
-/* Body & Background */
-body { 
-  font-family: Arial, sans-serif; 
-  background: #0a1f44; /* dark blue background */
-  display: flex; 
-  justify-content: center; 
-  align-items: center; 
-  height: 100vh; 
-  margin: 0;
-  padding: 10px;
-}
-
-/* Login Container with Gradient */
-.container { 
-  background: linear-gradient(135deg, #89cfff, #fff47f); /* light blue to yellow */
-  padding: 50px 30px; 
-  border-radius: 15px; 
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
-  width: 100%;
-  max-width: 420px; /* bigger for phone */
-  text-align: center;
-  color: #0a1f44; /* dark text */
-  box-sizing: border-box;
-}
-
-/* Headings */
-h2 {
-  margin-bottom: 30px;
-  font-size: 30px;
-  font-weight: bold;
-}
-
-/* Inputs & Buttons */
-input, button { 
-  width: 100%; 
-  padding: 16px; /* bigger touch area */
-  margin: 12px 0; 
-  border-radius: 10px; 
-  border: none; 
-  box-sizing: border-box; 
-  font-size: 18px; /* larger text for mobile */
-}
-
-/* Input Fields */
-input {
-  background: rgba(255,255,255,0.9);
-  color: #0a1f44;
-}
-
-/* Buttons */
-button { 
-  background: #0a1f44; 
-  color: #fff; 
-  cursor: pointer; 
-  transition: background 0.3s; 
-  font-weight: bold;
-}
-button:hover { 
-  background: #00214d; 
-}
-
-/* Switch Text */
-.switch { 
-  text-align: center; 
-  margin-top: 20px; 
-  cursor: pointer; 
-  color: #0a1f44; 
-  font-weight: bold;
-}
-.switch:hover { 
-  text-decoration: underline; 
-}
-
-/* Responsive for smaller screens */
-@media screen and (max-width: 400px){
-  .container {
-    padding: 40px 20px;
-  }
-  input, button {
-    padding: 14px;
-    font-size: 16px;
-  }
-  h2 {
-    font-size: 26px;
-  }
-}
+body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
+h2 { text-align: center; margin-bottom: 20px; }
+form { background: #fff; padding: 25px; border-radius: 10px; max-width: 600px; margin: 0 auto; box-shadow: 0 0 15px rgba(0,0,0,0.2); }
+input, select, textarea, button { width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 6px; border: 1px solid #ccc; box-sizing: border-box; font-size: 16px; }
+button { background: #007bff; color: #fff; border: none; cursor: pointer; font-weight: bold; }
+button:hover { background: #0056b3; }
+label { font-weight: bold; margin-top: 10px; display: block; }
+.status-link { display: block; text-align: center; margin-top: 20px; padding: 12px; background: #28a745; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; }
+.status-link:hover { background: #1e7e34; }
 </style>
 </head>
 <body>
 
-<div class="container" id="authContainer">
-  <h2 id="formTitle">Student Login</h2>
-  
-  <input type="email" id="email" placeholder="Email">
-  <input type="password" id="password" placeholder="Password">
-  <button id="actionButton">Login</button>
+<h2>Student Document Request Form</h2>
 
-  <p class="switch" id="toggleForm">Don't have an account? Sign Up</p>
-</div>
+<form id="requestForm">
+  <input type="text" name="first_name" placeholder="First Name" required>
+  <input type="text" name="middle_name" placeholder="Middle Name" required>
+  <input type="text" name="last_name" placeholder="Last Name" required>
+  <input type="text" name="student_address" placeholder="Address" required>
+  <input type="text" name="student_sex" placeholder="Sex" required>
+  <input type="email" name="student_email" placeholder="Student Email" required>
+  <input type="text" name="student_lrn" placeholder="Student LRN" required>
+  <input type="text" name="grade_section" placeholder="Grade & Section" required>
+  <input type="text" name="year_graduated" placeholder="Year Graduated (if alumni)">
+  <input type="tel" name="student_phone" placeholder="Phone Number" required>
+  <input type="text" name="requesting_office" placeholder="Requesting Office (for alumni)" required>
+  
+  <label>Type of Document:</label>
+  <select name="document_type" required>
+    <option value="">--Select Document--</option>
+    <option>Certificate of English as Medium of Instruction</option>
+    <option>Certificate of Enrollment</option>
+    <option>Certificate of General Weighted Average (GWA)</option>
+    <option>Certificate of Graduation</option>
+    <option>Certificate of Grades</option>
+    <option>Certificate of Honors</option>
+    <option>Certificate of No Pending Case</option>
+    <option>Certificate of Ranking</option>
+    <option>Certificate of Units Earned</option>
+    <option>Certified True Copy of Diploma</option>
+    <option>Certified True Copy of Records</option>
+    <option>Course Description</option>
+    <option>Diploma</option>
+    <option>Expected Date of Graduation</option>
+    <option>Form 137 / Permanent Record (SF10)</option>
+    <option>Form 138 / Report Card</option>
+    <option>Grading System Certification</option>
+    <option>Honorable Dismissal / Transfer Credentials</option>
+    <option>Letter of Recommendation</option>
+    <option>Permit to Transfer</option>
+    <option>Transcript of Records (TOR)</option>
+    <option>Verification / Authentication (CAV)</option>
+    <option>Others</option>
+  </select>
+
+  <textarea name="additional_info" placeholder="Additional Information / Details" rows="4"></textarea>
+  <textarea name="purpose" placeholder="Purpose of the Request" required rows="4"></textarea>
+
+  <label>Attach PDF Form (Optional - Max 5MB):</label>
+  <input type="file" id="pdfUpload" accept="application/pdf">
+
+  <button type="submit">Send Request</button>
+</form>
+
+<a class="status-link" href="https://pginhsrequest.wordpress.com/" target="_blank">
+  Go back to Homepage
+</a>
 
 <script>
+// 🔹 Replace with your Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyAal-tUtavmqhKDGfY5ETXTanvBoieN304",
   authDomain: "student-document-request-4cd93.firebaseapp.com",
   projectId: "student-document-request-4cd93",
   storageBucket: "student-document-request-4cd93.firebasestorage.app",
-  messagingSenderId: "646537888403",
-  appId: "1:646537888403:web:b9c8826a2ae92f073f4366",
-  measurementId: "G-TQQ8779L4G"
 };
-
 firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
+const db = firebase.firestore();
+const storage = firebase.storage();
 
-// Form state: "login" or "signup"
-let formState = "login";
+document.getElementById("requestForm").addEventListener("submit", async function(e){
+  e.preventDefault();
 
-const formTitle = document.getElementById("formTitle");
-const actionButton = document.getElementById("actionButton");
-const toggleForm = document.getElementById("toggleForm");
+  const file = document.getElementById("pdfUpload").files[0];
+  let fileURL = "";
 
-toggleForm.addEventListener("click", () => {
-  if(formState === "login"){
-    formState = "signup";
-    formTitle.innerText = "Student Sign Up";
-    actionButton.innerText = "Sign Up";
-    toggleForm.innerText = "Already have an account? Login";
-  } else {
-    formState = "login";
-    formTitle.innerText = "Student Login";
-    actionButton.innerText = "Login";
-    toggleForm.innerText = "Don't have an account? Sign Up";
+  if(file){
+    if(file.type !== "application/pdf"){
+      alert("Only PDF files are allowed.");
+      return;
+    }
+    if(file.size > 5*1024*1024){
+      alert("File too large. Max 5MB.");
+      return;
+    }
+
+    // Upload file to Firebase Storage
+    const storageRef = storage.ref("documents/" + Date.now() + "_" + file.name);
+    await storageRef.put(file);
+    fileURL = await storageRef.getDownloadURL();
   }
-});
 
-actionButton.addEventListener("click", () => {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+  // Save form data + PDF link to Firestore
+  const formData = {};
+  Array.from(this.elements).forEach(el => {
+    if(el.name && el.type !== "file") formData[el.name] = el.value;
+  });
+  formData.fileURL = fileURL;
+  formData.timestamp = new Date();
 
-  if(formState === "login"){
-    auth.signInWithEmailAndPassword(email, password)
-    .then(() => {
-      alert("Login Successful!");
-      window.location.href = "https://pginhsrequest.wordpress.com/"; // redirect to WordPress
-    })
-    .catch(error => {
-      alert("Login Failed: " + error.message);
-    });
-  } else {
-    auth.createUserWithEmailAndPassword(email, password)
-    .then(userCredential => {
-      alert("Account Created! Logging you in...");
-      // Automatically log in after sign-up and redirect
-      auth.signInWithEmailAndPassword(email, password)
-      .then(() => {
-        window.location.href = "https://pginhsrequest.wordpress.com/";
-      });
-    })
-    .catch(error => {
-      alert("Sign Up Failed: " + error.message);
-    });
-  }
+  await db.collection("requests").add(formData);
+
+  alert("Request submitted successfully!");
+  this.reset();
 });
 </script>
 
