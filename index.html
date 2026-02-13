@@ -2,17 +2,17 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title> PgINHS Student Log in / Sign Up</title>
+<title>PGINHS Student Log in / Sign Up</title>
 
 <!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <style>
-/* Body & Background */
 body { 
   font-family: Arial, sans-serif; 
-  background: #0a1f44; /* dark blue background */
+  background: #0a1f44;
   display: flex; 
   justify-content: center; 
   align-items: center; 
@@ -20,80 +20,36 @@ body {
   margin: 0;
   padding: 10px;
 }
-
-/* Login Container with Gradient */
 .container { 
-  background: linear-gradient(135deg, #89cfff, #fff47f); /* light blue to yellow */
+  background: linear-gradient(135deg, #89cfff, #fff47f);
   padding: 50px 30px; 
   border-radius: 15px; 
   box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
   width: 100%;
-  max-width: 420px; /* bigger for phone */
+  max-width: 420px;
   text-align: center;
-  color: #0a1f44; /* dark text */
+  color: #0a1f44;
   box-sizing: border-box;
 }
-
-/* Headings */
-h2 {
-  margin-bottom: 30px;
-  font-size: 30px;
-  font-weight: bold;
-}
-
-/* Inputs & Buttons */
+h2 { margin-bottom: 30px; font-size: 30px; font-weight: bold; }
 input, button { 
   width: 100%; 
-  padding: 16px; /* bigger touch area */
+  padding: 16px; 
   margin: 12px 0; 
   border-radius: 10px; 
   border: none; 
   box-sizing: border-box; 
-  font-size: 18px; /* larger text for mobile */
+  font-size: 18px;
 }
-
-/* Input Fields */
-input {
-  background: rgba(255,255,255,0.9);
-  color: #0a1f44;
-}
-
-/* Buttons */
-button { 
-  background: #0a1f44; 
-  color: #fff; 
-  cursor: pointer; 
-  transition: background 0.3s; 
-  font-weight: bold;
-}
-button:hover { 
-  background: #00214d; 
-}
-
-/* Switch Text */
-.switch { 
-  text-align: center; 
-  margin-top: 20px; 
-  cursor: pointer; 
-  color: #0a1f44; 
-  font-weight: bold;
-}
-.switch:hover { 
-  text-decoration: underline; 
-}
-
-/* Responsive for smaller screens */
+input { background: rgba(255,255,255,0.9); color: #0a1f44; }
+button { background: #0a1f44; color: #fff; cursor: pointer; transition: background 0.3s; font-weight: bold; }
+button:hover { background: #00214d; }
+.switch { text-align: center; margin-top: 20px; cursor: pointer; color: #0a1f44; font-weight: bold; }
+.switch:hover { text-decoration: underline; }
 @media screen and (max-width: 400px){
-  .container {
-    padding: 40px 20px;
-  }
-  input, button {
-    padding: 14px;
-    font-size: 16px;
-  }
-  h2 {
-    font-size: 26px;
-  }
+  .container { padding: 40px 20px; }
+  input, button { padding: 14px; font-size: 16px; }
+  h2 { font-size: 26px; }
 }
 </style>
 </head>
@@ -101,12 +57,9 @@ button:hover {
 
 <div class="container" id="authContainer">
   <h2 id="formTitle">Student Login</h2>
-  
   <input type="email" id="email" placeholder="Email">
   <input type="password" id="password" placeholder="Password">
-  
   <button id="actionButton">Login</button>
-
   <p class="switch" id="toggleForm">Don't have an account? Sign Up</p>
 </div>
 
@@ -123,14 +76,14 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
+const db = firebase.firestore();
 
-// Form state: "login" or "signup"
 let formState = "login";
-
 const formTitle = document.getElementById("formTitle");
 const actionButton = document.getElementById("actionButton");
 const toggleForm = document.getElementById("toggleForm");
 
+// Toggle between login and signup
 toggleForm.addEventListener("click", () => {
   if(formState === "login"){
     formState = "signup";
@@ -145,24 +98,45 @@ toggleForm.addEventListener("click", () => {
   }
 });
 
+// Generate a tracking number
+function generateTrackingNumber() {
+  const randomDigits = Math.floor(1000 + Math.random() * 9000);
+  const year = new Date().getFullYear();
+  return `PG-${year}-${randomDigits}`;
+}
+
+// Handle login/signup
 actionButton.addEventListener("click", () => {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
   if(formState === "login"){
     auth.signInWithEmailAndPassword(email, password)
-    .then(() => {
-      alert("Login Successful!");
-      window.location.href = "https://pginhsrequest.wordpress.com/"; // redirect to WordPress
+    .then(async userCredential => {
+      const user = userCredential.user;
+      const doc = await db.collection("users").doc(user.uid).get();
+      if(doc.exists){
+        const trackingNumber = doc.data().trackingNumber;
+        alert(`Login Successful! Your tracking number: ${trackingNumber}`);
+      } else {
+        alert("Login Successful!");
+      }
+      window.location.href = "https://pginhsrequest.wordpress.com/";
     })
     .catch(error => {
       alert("Login Failed: " + error.message);
     });
   } else {
     auth.createUserWithEmailAndPassword(email, password)
-    .then(userCredential => {
-      alert("Account Created! Logging you in...");
-      // Automatically log in after sign-up and redirect
+    .then(async userCredential => {
+      const user = userCredential.user;
+      const trackingNumber = generateTrackingNumber();
+      await db.collection("users").doc(user.uid).set({
+        email: email,
+        trackingNumber: trackingNumber,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      alert(`Account Created! Your tracking number is: ${trackingNumber}`);
       auth.signInWithEmailAndPassword(email, password)
       .then(() => {
         window.location.href = "https://pginhsrequest.wordpress.com/";
