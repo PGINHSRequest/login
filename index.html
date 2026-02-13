@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>PGINHS Student Log in / Sign Up</title>
+<title>PGINHS Student Login / Sign Up</title>
 
 <!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -78,7 +78,7 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-let formState = "log in";
+let formState = "login";
 const formTitle = document.getElementById("formTitle");
 const actionButton = document.getElementById("actionButton");
 const toggleForm = document.getElementById("toggleForm");
@@ -93,7 +93,7 @@ toggleForm.addEventListener("click", () => {
   } else {
     formState = "login";
     formTitle.innerText = "Student Login";
-    actionButton.innerText = "Log in";
+    actionButton.innerText = "Login";
     toggleForm.innerText = "Don't have an account? Sign Up";
   }
 });
