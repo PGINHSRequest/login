@@ -10,20 +10,45 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <style>
+/* Body with dark blue background and stars */
 body { 
-  font-family: Arial, sans-serif; 
-  background: #0a1f44;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  height: 100vh;
   display: flex; 
   justify-content: center; 
   align-items: center; 
-  height: 100vh; 
-  margin: 0;
-  padding: 10px;
+  background: #0a1f44;
+  overflow: hidden;
+  position: relative;
 }
+
+/* Star layer */
+.stars {
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background: transparent;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: #a0c4ff;
+  border-radius: 50%;
+  opacity: 0.8;
+}
+
+/* Container styling */
 .container { 
+  position: relative;
+  z-index: 1;
   background: linear-gradient(135deg, #89cfff, #fff47f);
   padding: 50px 30px; 
-  border-radius: 15px; 
+  border-radius: 20px; 
   box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
   width: 100%;
   max-width: 420px;
@@ -31,7 +56,15 @@ body {
   color: #0a1f44;
   box-sizing: border-box;
 }
-h2 { margin-bottom: 30px; font-size: 30px; font-weight: bold; }
+
+/* Title */
+h2 { 
+  margin-bottom: 30px; 
+  font-size: 30px; 
+  font-weight: bold; 
+}
+
+/* Inputs & Buttons */
 input, button { 
   width: 100%; 
   padding: 16px; 
@@ -41,11 +74,41 @@ input, button {
   box-sizing: border-box; 
   font-size: 18px;
 }
-input { background: rgba(255,255,255,0.9); color: #0a1f44; }
-button { background: #0a1f44; color: #fff; cursor: pointer; transition: background 0.3s; font-weight: bold; }
-button:hover { background: #00214d; }
-.switch { text-align: center; margin-top: 20px; cursor: pointer; color: #0a1f44; font-weight: bold; }
-.switch:hover { text-decoration: underline; }
+
+input { 
+  background: rgba(255,255,255,0.9); 
+  color: #0a1f44; 
+  text-align: center;
+}
+
+/* Gradient buttons */
+button { 
+  background: linear-gradient(45deg, #87CEFA, #00BFFF);
+  color: #0a1f44; 
+  cursor: pointer; 
+  transition: all 0.2s ease; 
+  font-weight: bold;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+button:hover { 
+  background: linear-gradient(45deg, #00BFFF, #1E90FF);
+  transform: translateY(-2px);
+}
+
+/* Toggle link */
+.switch { 
+  text-align: center; 
+  margin-top: 20px; 
+  cursor: pointer; 
+  color: #0a1f44; 
+  font-weight: bold; 
+}
+.switch:hover { 
+  text-decoration: underline; 
+}
+
+/* Mobile responsiveness */
 @media screen and (max-width: 400px){
   .container { padding: 40px 20px; }
   input, button { padding: 14px; font-size: 16px; }
@@ -54,6 +117,9 @@ button:hover { background: #00214d; }
 </style>
 </head>
 <body>
+
+<!-- Stars layer -->
+<div class="stars" id="starsContainer"></div>
 
 <div class="container" id="authContainer">
   <h2 id="formTitle">Student Login</h2>
@@ -64,6 +130,21 @@ button:hover { background: #00214d; }
 </div>
 
 <script>
+// Generate stars dynamically
+const starsContainer = document.getElementById("starsContainer");
+const starCount = 200;
+for (let i = 0; i < starCount; i++) {
+  const star = document.createElement("div");
+  star.classList.add("star");
+  star.style.top = Math.random() * 200 + "vh";
+  star.style.left = Math.random() * 200 + "vw";
+  star.style.width = Math.random() * 3 + 1 + "px";
+  star.style.height = star.style.width;
+  star.style.opacity = Math.random() * 0.8 + 0.2;
+  starsContainer.appendChild(star);
+}
+
+// Firebase setup
 const firebaseConfig = {
   apiKey: "AIzaSyAal-tUtavmqhKDGfY5ETXTanvBoieN304",
   authDomain: "student-document-request-4cd93.firebaseapp.com",
