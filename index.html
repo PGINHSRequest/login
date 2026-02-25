@@ -23,25 +23,11 @@ body {
   position: relative;
 }
 
-/* Full-width decorative rectangle */
-.decorative-bar {
-  position: absolute;
-  top: 50px; /* adjust vertical position */
-  left: 0;
-  width: 100vw;
-  height: 80px;
-  background: #0a1f44; /* dark blue inner */
-  border: 6px solid #FFA500; /* orange border */
-  box-shadow: 0 0 15px rgba(255,165,0,0.5);
-  z-index: 1;
-  border-radius: 12px;
-}
-
 /* Container with pastel gradient and shadow */
 .container { 
   position: relative;
   background: linear-gradient(135deg, #FFF8B5, #B3D9FF); 
-  padding: 150px 30px 50px 30px; /* top padding increased to clear the bar */
+  padding: 100px 30px 50px 30px; /* top padding increased for rectangle */
   border-radius: 25px; 
   box-shadow: 0 15px 35px rgba(0,0,0,0.35); 
   width: 100%; 
@@ -49,7 +35,22 @@ body {
   text-align: center; 
   color: #0a1f44; 
   box-sizing: border-box; 
+  z-index: 1;
+}
+
+/* Decorative rectangle aligned with container */
+.decorative-bar {
+  position: absolute;
+  top: 20px; /* inside container */
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: #0a1f44; /* dark blue inner */
+  border: 6px solid #FFA500; /* orange border */
+  box-shadow: 0 0 15px rgba(255,165,0,0.5);
+  border-radius: 12px;
   z-index: 2;
+  margin: 0 0; /* keep it flush inside container */
 }
 
 /* Title */
@@ -57,6 +58,8 @@ h2 {
   margin-bottom: 25px; 
   font-size: 28px; 
   font-weight: bold; 
+  position: relative;
+  z-index: 3;
 }
 
 /* Inputs */
@@ -71,6 +74,8 @@ input {
   display: block; 
   background: rgba(255,255,255,0.9); 
   color: #0a1f44;
+  position: relative;
+  z-index: 3;
 }
 
 /* Buttons */
@@ -87,6 +92,8 @@ button {
   box-shadow: 0 6px 18px rgba(0,0,0,0.25); 
   transition: all 0.25s ease; 
   display: block; 
+  position: relative;
+  z-index: 3;
 }
 button:hover { 
   background: linear-gradient(45deg, #8AC4E9, #FFF1A8); 
@@ -100,6 +107,8 @@ button:hover {
   cursor: pointer; 
   color: #0a1f44; 
   font-weight: bold; 
+  position: relative;
+  z-index: 3;
 }
 .switch:hover { 
   text-decoration: underline; 
@@ -107,7 +116,7 @@ button:hover {
 
 /* Mobile responsiveness */
 @media screen and (max-width: 400px){
-  .container { padding: 140px 20px 50px 20px; }
+  .container { padding: 90px 20px 50px 20px; }
   h2 { font-size: 26px; }
   input, button { padding: 14px; font-size: 16px; }
 }
@@ -115,10 +124,10 @@ button:hover {
 </head>
 <body>
 
-<!-- Full-width decorative rectangle -->
-<div class="decorative-bar"></div>
-
 <div class="container" id="authContainer">
+  <!-- Decorative rectangle inside the container -->
+  <div class="decorative-bar"></div>
+
   <h2 id="formTitle">Student Login</h2>
   <input type="email" id="email" placeholder="Email">
   <input type="password" id="password" placeholder="Password">
