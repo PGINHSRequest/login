@@ -10,7 +10,6 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <style>
-/* Body with dark blue background */
 body { 
   font-family: Arial, sans-serif; 
   background: #0a1f44; 
@@ -22,9 +21,8 @@ body {
   padding: 10px; 
 }
 
-/* Container with pastel gradient and shadows */
 .container { 
-  background: linear-gradient(135deg, #FFF8B5, #B3D9FF); /* pastel gradient */
+  background: linear-gradient(135deg, #FFF8B5, #B3D9FF); 
   padding: 50px 30px; 
   border-radius: 25px; 
   box-shadow: 0 15px 35px rgba(0,0,0,0.35); 
@@ -35,7 +33,6 @@ body {
   box-sizing: border-box; 
 }
 
-/* Optional placeholder for profile/logo image */
 .profile-pic {
   width: 120px;
   height: 120px;
@@ -45,14 +42,12 @@ body {
   border: 3px solid #0a1f44;
 }
 
-/* Title */
 h2 { 
   margin-bottom: 25px; 
   font-size: 28px; 
   font-weight: bold; 
 }
 
-/* Inputs */
 input { 
   width: 90%; 
   padding: 15px; 
@@ -66,7 +61,6 @@ input {
   color: #0a1f44;
 }
 
-/* Buttons */
 button { 
   width: 90%; 
   padding: 15px; 
@@ -86,7 +80,6 @@ button:hover {
   transform: translateY(-2px); 
 }
 
-/* Toggle link */
 .switch { 
   text-align: center; 
   margin-top: 15px; 
@@ -98,7 +91,6 @@ button:hover {
   text-decoration: underline; 
 }
 
-/* Mobile responsiveness */
 @media screen and (max-width: 400px){
   .container { padding: 40px 20px; }
   input, button { padding: 14px; font-size: 16px; }
@@ -110,8 +102,8 @@ button:hover {
 <body>
 
 <div class="container" id="authContainer">
-  <!-- Optional placeholder image -->
-  <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile Logo" class="profile-pic">
+  <!-- Key icon instead of person -->
+  <img src="https://cdn-icons-png.flaticon.com/512/709/709579.png" alt="Key Icon" class="profile-pic">
 
   <h2 id="formTitle">Student Login</h2>
   <input type="email" id="email" placeholder="Email">
@@ -139,7 +131,6 @@ const formTitle = document.getElementById("formTitle");
 const actionButton = document.getElementById("actionButton");
 const toggleForm = document.getElementById("toggleForm");
 
-// Toggle between login and signup
 toggleForm.addEventListener("click", () => {
   if(formState === "login"){
     formState = "signup";
@@ -154,14 +145,12 @@ toggleForm.addEventListener("click", () => {
   }
 });
 
-// Generate a tracking number
 function generateTrackingNumber() {
   const randomDigits = Math.floor(1000 + Math.random() * 9000);
   const year = new Date().getFullYear();
   return `PG-${year}-${randomDigits}`;
 }
 
-// Handle login/signup
 actionButton.addEventListener("click", () => {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
@@ -177,7 +166,7 @@ actionButton.addEventListener("click", () => {
       } else {
         alert("Login Successful!");
       }
-      window.location.href = "https://pginhsrequest.github.io/profile/";
+      window.location.href = "https://pginhsrequest.github.io/student-profile/";
     })
     .catch(error => {
       alert("Login Failed: " + error.message);
@@ -195,7 +184,7 @@ actionButton.addEventListener("click", () => {
       alert(`Account Created! Your tracking number is: ${trackingNumber}`);
       auth.signInWithEmailAndPassword(email, password)
       .then(() => {
-        window.location.href = "https://pginhsrequest.github.io/profile/";
+        window.location.href = "https://pginhsrequest.github.io/student-profile/";
       });
     })
     .catch(error => {
