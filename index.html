@@ -189,7 +189,7 @@ actionButton.addEventListener("click", () => {
       } else {
         alert("Login Successful!");
       }
-      window.location.href = "https://pginhsrequest.github.io/profile/";
+      window.location.href = "https://pginhsrequest.github.io/student-profile/";
     })
     .catch(error => {
       alert("Login Failed: " + error.message);
@@ -207,7 +207,7 @@ actionButton.addEventListener("click", () => {
       alert(`Account Created! Your tracking number is: ${trackingNumber}`);
       auth.signInWithEmailAndPassword(email, password)
       .then(() => {
-        window.location.href = "https://pginhsrequest.github.io/profile/";
+        window.location.href = "https://pginhsrequest.github.io/student-profile/";
       });
     })
     .catch(error => {
