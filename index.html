@@ -2,15 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>PGINHS Student Login / Sign Up</title>
-
-<!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<title>PGINHS Student Portal</title>
 
 <style>
-/* Body with dark blue background and stars */
+/* Body with dark blue and gray gradient, subtle starry vibe */
 body { 
   margin: 0;
   font-family: Arial, sans-serif;
@@ -18,9 +13,10 @@ body {
   display: flex; 
   justify-content: center; 
   align-items: center; 
-  background: #0a1f44;
+  background: linear-gradient(135deg, #0a1f44, #3a3a3a);
   overflow: hidden;
   position: relative;
+  color: #FFD700; /* golden yellow for text accents */
 }
 
 /* Star layer */
@@ -37,23 +33,23 @@ body {
   position: absolute;
   width: 2px;
   height: 2px;
-  background: #a0c4ff;
+  background: #FFD700; /* golden yellow stars */
   border-radius: 50%;
-  opacity: 0.8;
+  opacity: 0.7;
 }
 
-/* Container styling */
+/* Main container */
 .container { 
   position: relative;
   z-index: 1;
-  background: linear-gradient(135deg, #89cfff, #fff47f);
+  background: linear-gradient(135deg, #1E3A5F, #FFD700); /* dark blue to golden yellow */
   padding: 50px 30px; 
   border-radius: 20px; 
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4); 
   width: 100%;
   max-width: 420px;
   text-align: center;
-  color: #0a1f44;
+  color: #0a1f44; /* dark text on light container */
   box-sizing: border-box;
 }
 
@@ -81,9 +77,9 @@ input {
   text-align: center;
 }
 
-/* Gradient buttons */
+/* Gradient buttons using your color palette */
 button { 
-  background: linear-gradient(45deg, #87CEFA, #00BFFF);
+  background: linear-gradient(45deg, #1E3A5F, #FFD700); 
   color: #0a1f44; 
   cursor: pointer; 
   transition: all 0.2s ease; 
@@ -92,7 +88,7 @@ button {
 }
 
 button:hover { 
-  background: linear-gradient(45deg, #00BFFF, #1E90FF);
+  background: linear-gradient(45deg, #FFD700, #1E3A5F);
   transform: translateY(-2px);
 }
 
@@ -121,18 +117,18 @@ button:hover {
 <!-- Stars layer -->
 <div class="stars" id="starsContainer"></div>
 
-<div class="container" id="authContainer">
-  <h2 id="formTitle">Student Login</h2>
-  <input type="email" id="email" placeholder="Email">
-  <input type="password" id="password" placeholder="Password">
-  <button id="actionButton">Login</button>
-  <p class="switch" id="toggleForm">Don't have an account? Sign Up</p>
+<div class="container">
+  <h2>Welcome to PGINHS Portal</h2>
+  <input type="text" placeholder="Student ID">
+  <input type="password" placeholder="Password">
+  <button>Access Portal</button>
+  <p class="switch">Forgot your password?</p>
 </div>
 
 <script>
 // Generate stars dynamically
 const starsContainer = document.getElementById("starsContainer");
-const starCount = 200;
+const starCount = 150;
 for (let i = 0; i < starCount; i++) {
   const star = document.createElement("div");
   star.classList.add("star");
@@ -143,91 +139,6 @@ for (let i = 0; i < starCount; i++) {
   star.style.opacity = Math.random() * 0.8 + 0.2;
   starsContainer.appendChild(star);
 }
-
-// Firebase setup
-const firebaseConfig = {
-  apiKey: "AIzaSyAal-tUtavmqhKDGfY5ETXTanvBoieN304",
-  authDomain: "student-document-request-4cd93.firebaseapp.com",
-  projectId: "student-document-request-4cd93",
-  storageBucket: "student-document-request-4cd93.firebasestorage.app",
-  messagingSenderId: "646537888403",
-  appId: "1:646537888403:web:b9c8826a2ae92f073f4366",
-  measurementId: "G-TQQ8779L4G"
-};
-
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
-
-let formState = "login";
-const formTitle = document.getElementById("formTitle");
-const actionButton = document.getElementById("actionButton");
-const toggleForm = document.getElementById("toggleForm");
-
-// Toggle between login and signup
-toggleForm.addEventListener("click", () => {
-  if(formState === "login"){
-    formState = "signup";
-    formTitle.innerText = "Student Sign Up";
-    actionButton.innerText = "Sign Up";
-    toggleForm.innerText = "Already have an account? Login";
-  } else {
-    formState = "login";
-    formTitle.innerText = "Student Login";
-    actionButton.innerText = "Login";
-    toggleForm.innerText = "Don't have an account? Sign Up";
-  }
-});
-
-// Generate a tracking number
-function generateTrackingNumber() {
-  const randomDigits = Math.floor(1000 + Math.random() * 9000);
-  const year = new Date().getFullYear();
-  return `PG-${year}-${randomDigits}`;
-}
-
-// Handle login/signup
-actionButton.addEventListener("click", () => {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-
-  if(formState === "login"){
-    auth.signInWithEmailAndPassword(email, password)
-    .then(async userCredential => {
-      const user = userCredential.user;
-      const doc = await db.collection("users").doc(user.uid).get();
-      if(doc.exists){
-        const trackingNumber = doc.data().trackingNumber;
-        alert(`Login Successful! Your tracking number: ${trackingNumber}`);
-      } else {
-        alert("Login Successful!");
-      }
-      window.location.href = "https://pginhsrequest.github.io/student-profile/";
-    })
-    .catch(error => {
-      alert("Login Failed: " + error.message);
-    });
-  } else {
-    auth.createUserWithEmailAndPassword(email, password)
-    .then(async userCredential => {
-      const user = userCredential.user;
-      const trackingNumber = generateTrackingNumber();
-      await db.collection("users").doc(user.uid).set({
-        email: email,
-        trackingNumber: trackingNumber,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-      alert(`Account Created! Your tracking number is: ${trackingNumber}`);
-      auth.signInWithEmailAndPassword(email, password)
-      .then(() => {
-        window.location.href = "https://pginhsrequest.github.io/student-profile/";
-      });
-    })
-    .catch(error => {
-      alert("Sign Up Failed: " + error.message);
-    });
-  }
-});
 </script>
 
 </body>
