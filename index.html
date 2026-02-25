@@ -5,7 +5,7 @@
 <title>PGINHS Student Portal</title>
 
 <style>
-/* Body with dark blue and gray gradient, subtle starry vibe */
+/* Body with dark blue background */
 body { 
   margin: 0;
   font-family: Arial, sans-serif;
@@ -13,89 +13,89 @@ body {
   display: flex; 
   justify-content: center; 
   align-items: center; 
-  background: linear-gradient(135deg, #0a1f44, #3a3a3a);
+  background: #0a1f44;
   overflow: hidden;
+}
+
+/* Wrapper for arch */
+.wrapper {
   position: relative;
-  color: #FFD700; /* golden yellow for text accents */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-/* Star layer */
-.stars {
+/* Decorative arch */
+.wrapper::before {
+  content: "";
   position: absolute;
-  width: 200%;
-  height: 200%;
-  background: transparent;
-  z-index: 0;
-  pointer-events: none;
+  top: -80px;
+  width: 220px;
+  height: 100px;
+  background: #0a1f44;
+  border-radius: 50% 50% 0 0;
+  border: 6px solid #FFA500;
+  box-shadow: 0 0 15px rgba(255,165,0,0.5);
+  z-index: 2;
 }
 
-.star {
-  position: absolute;
-  width: 2px;
-  height: 2px;
-  background: #FFD700; /* golden yellow stars */
-  border-radius: 50%;
-  opacity: 0.7;
-}
-
-/* Main container */
+/* Main portal container */
 .container { 
   position: relative;
   z-index: 1;
-  background: linear-gradient(135deg, #1E3A5F, #FFD700); /* dark blue to golden yellow */
+  background: linear-gradient(135deg, #FFF8B5, #B3D9FF); /* pastel gradient */
   padding: 50px 30px; 
-  border-radius: 20px; 
-  box-shadow: 0 10px 30px rgba(0,0,0,0.4); 
+  border-radius: 25px; 
+  box-shadow: 0 15px 35px rgba(0,0,0,0.35); 
   width: 100%;
-  max-width: 420px;
+  max-width: 400px;
   text-align: center;
-  color: #0a1f44; /* dark text on light container */
+  color: #0a1f44;
   box-sizing: border-box;
 }
 
 /* Title */
 h2 { 
   margin-bottom: 30px; 
-  font-size: 30px; 
+  font-size: 28px; 
   font-weight: bold; 
 }
 
-/* Inputs & Buttons */
-input, button { 
-  width: 100%; 
-  padding: 16px; 
-  margin: 12px 0; 
-  border-radius: 10px; 
-  border: none; 
-  box-sizing: border-box; 
-  font-size: 18px;
-}
-
+/* Inputs */
 input { 
-  background: rgba(255,255,255,0.9); 
-  color: #0a1f44; 
+  width: 90%; 
+  padding: 15px; 
+  margin: 12px auto; 
+  border-radius: 12px; 
+  border: 1px solid #0a1f44;
+  font-size: 16px;
   text-align: center;
+  display: block;
 }
 
-/* Gradient buttons using your color palette */
+/* Buttons */
 button { 
-  background: linear-gradient(45deg, #1E3A5F, #FFD700); 
-  color: #0a1f44; 
-  cursor: pointer; 
-  transition: all 0.2s ease; 
+  width: 90%; 
+  padding: 15px; 
+  margin: 12px auto; 
+  border-radius: 12px; 
+  border: 2px solid #0a1f44;
+  background: linear-gradient(45deg, #A2D5F2, #FFF5BA);
+  color: #0a1f44;
   font-weight: bold;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+  transition: all 0.25s ease;
+  display: block;
 }
-
-button:hover { 
-  background: linear-gradient(45deg, #FFD700, #1E3A5F);
+button:hover {
+  background: linear-gradient(45deg, #8AC4E9, #FFF1A8);
   transform: translateY(-2px);
 }
 
 /* Toggle link */
 .switch { 
-  text-align: center; 
-  margin-top: 20px; 
+  margin-top: 15px;
   cursor: pointer; 
   color: #0a1f44; 
   font-weight: bold; 
@@ -104,7 +104,7 @@ button:hover {
   text-decoration: underline; 
 }
 
-/* Mobile responsiveness */
+/* MOBILE RESPONSIVE */
 @media screen and (max-width: 400px){
   .container { padding: 40px 20px; }
   input, button { padding: 14px; font-size: 16px; }
@@ -114,32 +114,15 @@ button:hover {
 </head>
 <body>
 
-<!-- Stars layer -->
-<div class="stars" id="starsContainer"></div>
-
-<div class="container">
-  <h2>Welcome to PGINHS Portal</h2>
-  <input type="text" placeholder="Student ID">
-  <input type="password" placeholder="Password">
-  <button>Access Portal</button>
-  <p class="switch">Forgot your password?</p>
+<div class="wrapper">
+  <div class="container">
+    <h2>Welcome to PGINHS Portal</h2>
+    <input type="text" placeholder="Student ID">
+    <input type="password" placeholder="Password">
+    <button>Access Portal</button>
+    <p class="switch">Forgot your password?</p>
+  </div>
 </div>
-
-<script>
-// Generate stars dynamically
-const starsContainer = document.getElementById("starsContainer");
-const starCount = 150;
-for (let i = 0; i < starCount; i++) {
-  const star = document.createElement("div");
-  star.classList.add("star");
-  star.style.top = Math.random() * 200 + "vh";
-  star.style.left = Math.random() * 200 + "vw";
-  star.style.width = Math.random() * 3 + 1 + "px";
-  star.style.height = star.style.width;
-  star.style.opacity = Math.random() * 0.8 + 0.2;
-  starsContainer.appendChild(star);
-}
-</script>
 
 </body>
 </html>
