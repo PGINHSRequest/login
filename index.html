@@ -19,9 +19,12 @@ body {
   height: 100vh; 
   margin: 0; 
   padding: 10px; 
+  overflow: hidden;
 }
 
+/* Container with pastel gradient and shadow */
 .container { 
+  position: relative;
   background: linear-gradient(135deg, #FFF8B5, #B3D9FF); 
   padding: 50px 30px; 
   border-radius: 25px; 
@@ -33,21 +36,32 @@ body {
   box-sizing: border-box; 
 }
 
-.profile-pic {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-bottom: 25px;
-  border: 3px solid #0a1f44;
+/* Decorative rectangle in place of profile picture */
+.container::before {
+  content: "";
+  position: absolute;
+  top: 20px; /* position inside container where picture was */
+  left: 10px;
+  right: 10px;
+  height: 80px;
+  background: #0a1f44; /* dark blue inner */
+  border: 4px solid #FFA500; /* orange border */
+  box-shadow: 0 0 15px rgba(255,165,0,0.5);
+  border-radius: 12px;
+  z-index: 2;
 }
 
+/* Title */
 h2 { 
+  margin-top: 120px; /* push title below the decorative rectangle */
   margin-bottom: 25px; 
   font-size: 28px; 
   font-weight: bold; 
+  position: relative;
+  z-index: 3;
 }
 
+/* Inputs */
 input { 
   width: 90%; 
   padding: 15px; 
@@ -59,8 +73,11 @@ input {
   display: block; 
   background: rgba(255,255,255,0.9); 
   color: #0a1f44;
+  position: relative;
+  z-index: 3;
 }
 
+/* Buttons */
 button { 
   width: 90%; 
   padding: 15px; 
@@ -74,37 +91,39 @@ button {
   box-shadow: 0 6px 18px rgba(0,0,0,0.25); 
   transition: all 0.25s ease; 
   display: block; 
+  position: relative;
+  z-index: 3;
 }
 button:hover { 
   background: linear-gradient(45deg, #8AC4E9, #FFF1A8); 
   transform: translateY(-2px); 
 }
 
+/* Toggle link */
 .switch { 
   text-align: center; 
   margin-top: 15px; 
   cursor: pointer; 
   color: #0a1f44; 
   font-weight: bold; 
+  position: relative;
+  z-index: 3;
 }
 .switch:hover { 
   text-decoration: underline; 
 }
 
+/* Mobile responsiveness */
 @media screen and (max-width: 400px){
   .container { padding: 40px 20px; }
+  h2 { margin-top: 120px; font-size: 26px; }
   input, button { padding: 14px; font-size: 16px; }
-  h2 { font-size: 26px; }
-  .profile-pic { width: 100px; height: 100px; }
 }
 </style>
 </head>
 <body>
 
 <div class="container" id="authContainer">
-  <!-- Stacked documents icon -->
-  <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png" alt="Documents Icon" class="profile-pic">
-
   <h2 id="formTitle">Student Login</h2>
   <input type="email" id="email" placeholder="Email">
   <input type="password" id="password" placeholder="Password">
