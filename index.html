@@ -2,61 +2,52 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>PGINHS Student Portal</title>
+<title>PGINHS Student Login / Sign Up</title>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <style>
 /* Body with dark blue background */
 body { 
-  margin: 0;
-  font-family: Arial, sans-serif;
-  height: 100vh;
+  font-family: Arial, sans-serif; 
+  background: #0a1f44; 
   display: flex; 
   justify-content: center; 
   align-items: center; 
-  background: #0a1f44;
-  overflow: hidden;
+  height: 100vh; 
+  margin: 0; 
+  padding: 10px; 
 }
 
-/* Wrapper for arch */
-.wrapper {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* Decorative arch */
-.wrapper::before {
-  content: "";
-  position: absolute;
-  top: -80px;
-  width: 220px;
-  height: 100px;
-  background: #0a1f44;
-  border-radius: 50% 50% 0 0;
-  border: 6px solid #FFA500;
-  box-shadow: 0 0 15px rgba(255,165,0,0.5);
-  z-index: 2;
-}
-
-/* Main portal container */
+/* Container with pastel gradient and shadows */
 .container { 
-  position: relative;
-  z-index: 1;
   background: linear-gradient(135deg, #FFF8B5, #B3D9FF); /* pastel gradient */
   padding: 50px 30px; 
   border-radius: 25px; 
   box-shadow: 0 15px 35px rgba(0,0,0,0.35); 
-  width: 100%;
-  max-width: 400px;
-  text-align: center;
-  color: #0a1f44;
-  box-sizing: border-box;
+  width: 100%; 
+  max-width: 420px; 
+  text-align: center; 
+  color: #0a1f44; 
+  box-sizing: border-box; 
+}
+
+/* Optional placeholder for profile/logo image */
+.profile-pic {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 25px;
+  border: 3px solid #0a1f44;
 }
 
 /* Title */
 h2 { 
-  margin-bottom: 30px; 
+  margin-bottom: 25px; 
   font-size: 28px; 
   font-weight: bold; 
 }
@@ -67,10 +58,12 @@ input {
   padding: 15px; 
   margin: 12px auto; 
   border-radius: 12px; 
-  border: 1px solid #0a1f44;
-  font-size: 16px;
-  text-align: center;
-  display: block;
+  border: 1px solid #0a1f44; 
+  font-size: 16px; 
+  text-align: center; 
+  display: block; 
+  background: rgba(255,255,255,0.9); 
+  color: #0a1f44;
 }
 
 /* Buttons */
@@ -79,23 +72,24 @@ button {
   padding: 15px; 
   margin: 12px auto; 
   border-radius: 12px; 
-  border: 2px solid #0a1f44;
-  background: linear-gradient(45deg, #A2D5F2, #FFF5BA);
-  color: #0a1f44;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
-  transition: all 0.25s ease;
-  display: block;
+  border: 2px solid #0a1f44; 
+  background: linear-gradient(45deg, #A2D5F2, #FFF5BA); 
+  color: #0a1f44; 
+  font-weight: bold; 
+  cursor: pointer; 
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25); 
+  transition: all 0.25s ease; 
+  display: block; 
 }
-button:hover {
-  background: linear-gradient(45deg, #8AC4E9, #FFF1A8);
-  transform: translateY(-2px);
+button:hover { 
+  background: linear-gradient(45deg, #8AC4E9, #FFF1A8); 
+  transform: translateY(-2px); 
 }
 
 /* Toggle link */
 .switch { 
-  margin-top: 15px;
+  text-align: center; 
+  margin-top: 15px; 
   cursor: pointer; 
   color: #0a1f44; 
   font-weight: bold; 
@@ -104,25 +98,112 @@ button:hover {
   text-decoration: underline; 
 }
 
-/* MOBILE RESPONSIVE */
+/* Mobile responsiveness */
 @media screen and (max-width: 400px){
   .container { padding: 40px 20px; }
   input, button { padding: 14px; font-size: 16px; }
   h2 { font-size: 26px; }
+  .profile-pic { width: 100px; height: 100px; }
 }
 </style>
 </head>
 <body>
 
-<div class="wrapper">
-  <div class="container">
-    <h2>Welcome to PGINHS Portal</h2>
-    <input type="text" placeholder="Student ID">
-    <input type="password" placeholder="Password">
-    <button>Access Portal</button>
-    <p class="switch">Forgot your password?</p>
-  </div>
+<div class="container" id="authContainer">
+  <!-- Optional placeholder image -->
+  <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile Logo" class="profile-pic">
+
+  <h2 id="formTitle">Student Login</h2>
+  <input type="email" id="email" placeholder="Email">
+  <input type="password" id="password" placeholder="Password">
+  <button id="actionButton">Login</button>
+  <p class="switch" id="toggleForm">Don't have an account? Sign Up</p>
 </div>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyAal-tUtavmqhKDGfY5ETXTanvBoieN304",
+  authDomain: "student-document-request-4cd93.firebaseapp.com",
+  projectId: "student-document-request-4cd93",
+  storageBucket: "student-document-request-4cd93.appspot.com",
+  messagingSenderId: "646537888403",
+  appId: "1:646537888403:web:b9c8826a2ae92f073f4366",
+  measurementId: "G-TQQ8779L4G"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+let formState = "login";
+const formTitle = document.getElementById("formTitle");
+const actionButton = document.getElementById("actionButton");
+const toggleForm = document.getElementById("toggleForm");
+
+// Toggle between login and signup
+toggleForm.addEventListener("click", () => {
+  if(formState === "login"){
+    formState = "signup";
+    formTitle.innerText = "Student Sign Up";
+    actionButton.innerText = "Sign Up";
+    toggleForm.innerText = "Already have an account? Login";
+  } else {
+    formState = "login";
+    formTitle.innerText = "Student Login";
+    actionButton.innerText = "Login";
+    toggleForm.innerText = "Don't have an account? Sign Up";
+  }
+});
+
+// Generate a tracking number
+function generateTrackingNumber() {
+  const randomDigits = Math.floor(1000 + Math.random() * 9000);
+  const year = new Date().getFullYear();
+  return `PG-${year}-${randomDigits}`;
+}
+
+// Handle login/signup
+actionButton.addEventListener("click", () => {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  if(formState === "login"){
+    auth.signInWithEmailAndPassword(email, password)
+    .then(async userCredential => {
+      const user = userCredential.user;
+      const doc = await db.collection("users").doc(user.uid).get();
+      if(doc.exists){
+        const trackingNumber = doc.data().trackingNumber;
+        alert(`Login Successful! Your tracking number: ${trackingNumber}`);
+      } else {
+        alert("Login Successful!");
+      }
+      window.location.href = "https://pginhsrequest.github.io/profile/";
+    })
+    .catch(error => {
+      alert("Login Failed: " + error.message);
+    });
+  } else {
+    auth.createUserWithEmailAndPassword(email, password)
+    .then(async userCredential => {
+      const user = userCredential.user;
+      const trackingNumber = generateTrackingNumber();
+      await db.collection("users").doc(user.uid).set({
+        email: email,
+        trackingNumber: trackingNumber,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      alert(`Account Created! Your tracking number is: ${trackingNumber}`);
+      auth.signInWithEmailAndPassword(email, password)
+      .then(() => {
+        window.location.href = "https://pginhsrequest.github.io/profile/";
+      });
+    })
+    .catch(error => {
+      alert("Sign Up Failed: " + error.message);
+    });
+  }
+});
+</script>
 
 </body>
 </html>
